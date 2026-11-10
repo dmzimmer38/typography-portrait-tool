@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#f7f3ee">
+<title>My Typography Portrait Studio</title>
+<style>
+:root{--ink:#302b29;--muted:#756b65;--paper:#fbf9f6;--rose:#a86f68;--line:#e7ded7;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:28px 20px 20px;text-align:center;background:linear-gradient(135deg,#f2e8e2,#faf6f1)}
+h1{font:500 clamp(27px,5vw,39px)/1.15 Georgia,serif;margin:0 0 8px}.sub{color:var(--muted);margin:0}
+main{max-width:1050px;margin:auto;padding:16px;display:grid;gap:14px}
+section{background:white;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 4px 18px #39251a0a}
+h2{font:500 21px Georgia,serif;margin:0 0 12px}.num{color:var(--rose);font:600 12px -apple-system,sans-serif;letter-spacing:.08em}
+p.help{font-size:14px;color:var(--muted);margin:4px 0 12px}
+button,.filebutton{appearance:none;border:1px solid #d8c9c0;background:#fbf7f3;color:var(--ink);border-radius:12px;padding:12px 15px;font:600 15px -apple-system,sans-serif;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:46px}
+button.primary,.filebutton.primary{background:#8f5f59;color:white;border-color:#8f5f59}
+button:active,.filebutton:active{transform:scale(.99)}
+input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.row{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+#status{font-size:14px;color:#5b765c;margin-top:10px;min-height:20px}
+#photoPreview{display:none;width:100%;max-height:360px;object-fit:contain;background:#f6f2ee;border-radius:12px;margin-top:14px}
+label{font-size:14px;color:var(--muted);display:block;margin:12px 0 5px}
+textarea,input[type=text],select{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:16px -apple-system,sans-serif;background:#fff;color:var(--ink)}
+textarea{min-height:104px;resize:vertical}
+input[type=range]{width:100%;accent-color:var(--rose)}
+.check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin-top:10px}
+#traceCanvas{width:100%;height:auto;display:block;touch-action:none;background:#f7f4f0;border:1px dashed #cdbdb2;border-radius:12px}
+.canvaswrap{position:relative}
+#artCanvas{width:100%;height:auto;display:block;background:#fff;border:1px solid var(--line);border-radius:12px}
+.small{font-size:13px;color:var(--muted)}
+@media(min-width:800px){main{grid-template-columns:1fr 1fr}.wide{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<header><h1>My Typography Portrait Studio</h1><p class="sub">A little art made from a lot of love. Designed for iPad and Apple Pencil.</p></header>
+<main>
+<section>
+<div class="num">01 · ADD YOUR PHOTOGRAPH</div><h2>Choose your photo</h2>
+<p class="help">Choose a clear photograph. It is only a tracing guide and will not appear in your exported artwork.</p>
+<label class="filebutton primary" for="photoInput">＋ Choose a photo</label><input id="photoInput" type="file" accept="image/*">
+<img id="photoPreview" alt="Selected photograph preview">
+<label class="check"><input id="showPhoto" type="checkbox" checked> Show faint photo while tracing</label>
+<div id="status" aria-live="polite">Choose a photograph to begin.</div>
+</section>
+<section>
+<div class="num">02 · CREATE THE FACE SHAPE</div><h2>Trace the faces</h2>
+<p class="help">Use your finger or Apple Pencil to draw around the outside of the hair, cheeks and chin. Trace both heads together for one connected composition.</p>
+<div class="canvaswrap"><canvas id="traceCanvas" width="900" height="900"></canvas></div>
+<div class="row" style="margin-top:10px"><button id="undo">↶ Undo last stroke</button><button id="oval">◯ Create oval guide</button><button id="clear">Clear outline</button></div>
+</section>
+<section>
+<div class="num">03 · ADD MEANINGFUL WORDS</div><h2>Choose your words</h2>
+<p class="help">Add names, personality traits, memories and special phrases. Separate words with commas or new lines.</p>
+<textarea id="words">Beautiful
+Curious
+Brave
+Kind heart
+Big dreams
+Laughter
+Adventure
+Always loved</textarea>
+<div class="row">
+<div style="flex:1;min-width:150px"><label>Font style</label><select id="font"><option value="Georgia">Elegant serif</option><option value="Arial">Clean modern</option><option value="Palatino Linotype">Classic</option><option value="Trebuchet MS">Soft rounded</option><option value="cursive">Handwritten style</option></select></div>
+<div style="flex:1;min-width:150px"><label>Ink colour</label><select id="colour"><option value="#24201f">Black</option><option value="#45413f">Charcoal</option><option value="#805d4d">Warm brown</option><option value="#526b83">Slate blue</option></select></div>
+</div>
+</section>
+<section>
+<div class="num">04 · CHOOSE YOUR TYPOGRAPHY STYLE</div><h2>Arrange the words</h2>
+<div class="row"><label class="check"><input type="radio" name="layout" value="outline" checked> Words along outline</label><label class="check"><input type="radio" name="layout" value="fill"> Words fill the face</label></div>
+<p class="help">Words follow the traced boundary, turning the face outline into a flowing line of typography, or repeat inside the traced shape.</p>
+<label>Word size: <span id="sizeVal">19</span></label><input id="size" type="range" min="10" max="34" value="19">
+<label>Word spacing: <span id="spaceVal">8</span></label><input id="space" type="range" min="0" max="24" value="8">
+<div class="row" style="margin-top:12px"><button class="primary" id="update">Update portrait</button><button id="reset">Reset outline</button></div>
+</section>
+<section class="wide">
+<div class="num">05 · YOUR ARTWORK</div><h2>Your typography portrait</h2>
+<p class="help">The dashed line is a working guide only. It will not appear in your exported artwork.</p>
+<canvas id="artCanvas" width="1200" height="1200"></canvas>
+<div class="row" style="margin-top:12px"><button class="primary" id="export">↓ Export high-resolution PNG</button></div>
+<p class="small">Exports a 3000 × 3000 pixel square image. Your photograph is not included.</p>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id), trace=$('traceCanvas'), tctx=trace.getContext('2d'), art=$('artCanvas'), actx=art.getContext('2d');
+let photo=null, strokes=[], active=null, outlinePoints=[];
+function drawTrace(){
+ tctx.clearRect(0,0,900,900);
+ if(photo && $('showPhoto').checked){let s=Math.min(900/photo.width,900/photo.height);let w=photo.width*s,h=photo.height*s;tctx.globalAlpha=.28;tctx.drawImage(photo,(900-w)/2,(900-h)/2,w,h);tctx.globalAlpha=1}
+ tctx.strokeStyle='#a86f68';tctx.lineWidth=4;tctx.lineCap='round';tctx.lineJoin='round';
+ for(const stroke of strokes){if(stroke.length<2)continue;tctx.beginPath();tctx.moveTo(stroke[0].x,stroke[0].y);for(let p of stroke.slice(1))tctx.lineTo(p.x,p.y);tctx.stroke()}
+ if(active&&active.length>1){tctx.beginPath();tctx.moveTo(active[0].x,active[0].y);active.slice(1).forEach(p=>tctx.lineTo(p.x,p.y));tctx.stroke()}
+}
+function point(e){let r=trace.getBoundingClientRect();return{x:(e.clientX-r.left)*900/r.width,y:(e.clientY-r.top)*900/r.height}}
+trace.addEventListener('pointerdown',e=>{e.preventDefault();trace.setPointerCapture(e.pointerId);active=[point(e)];drawTrace()});
+trace.addEventListener('pointermove',e=>{if(!active)return;e.preventDefault();active.push(point(e));drawTrace()});
+function finish(){if(active){if(active.length>1)strokes.push(active);active=null;drawTrace()}}
+trace.addEventListener('pointerup',finish);trace.addEventListener('pointercancel',finish);
+$('photoInput').addEventListener('change',e=>{
+ const file=e.target.files&&e.target.files[0];if(!file)return;
+ $('status').textContent='Loading your photo…';
+ const url=URL.createObjectURL(file), img=new Image();
+ img.onload=()=>{photo=img;$('photoPreview').src=url;$('photoPreview').style.display='block';$('status').textContent='✓ Photo loaded. You can now trace around the faces.';drawTrace()};
+ img.onerror=()=>{$('status').textContent='This photo format could not be opened. Try a JPG or PNG copy.';URL.revokeObjectURL(url)};
+ img.src=url;
+});
+$('showPhoto').onchange=drawTrace;
+$('undo').onclick=()=>{strokes.pop();drawTrace()};
+$('clear').onclick=()=>{strokes=[];drawTrace()};
+$('reset').onclick=()=>{strokes=[];drawTrace();renderArt()};
+$('oval').onclick=()=>{strokes.push(Array.from({length:181},(_,i)=>{let a=i*Math.PI/90;return{x:450+255*Math.cos(a),y:450+345*Math.sin(a)}}));drawTrace()};
+$('size').oninput=()=> $('sizeVal').textContent=$('size').value;
+$('space').oninput=()=> $('spaceVal').textContent=$('space').value;
+function wordsList(){return $('words').value.split(/[,\n]+/).map(s=>s.trim()).filter(Boolean)}
+function renderArt(){
+ actx.clearRect(0,0,1200,1200);actx.fillStyle='#fff';actx.fillRect(0,0,1200,1200);
+ const pts=strokes.flat();if(pts.length<3){actx.fillStyle='#877d77';actx.font='28px Georgia';actx.textAlign='center';actx.fillText('Trace a face shape to begin',600,600);return}
+ const scale=1.2, ox=60,oy=60, poly=pts.map(p=>({x:p.x*scale+ox,y:p.y*scale+oy}));
+ const words=wordsList();if(!words.length)return;
+ const font=$('font').value,colour=$('colour').value,size=+$('size').value,space=+$('space').value;
+ actx.save();actx.beginPath();poly.forEach((p,i)=>i?actx.lineTo(p.x,p.y):actx.moveTo(p.x,p.y));actx.closePath();
+ const layout=document.querySelector('input[name="layout"]:checked').value;
+ if(layout==='fill'){
+  actx.clip();actx.fillStyle=colour;actx.textAlign='center';actx.textBaseline='middle';actx.font=`${size}px "${font}"`;
+  let idx=0;for(let y=130;y<1120;y+=size+space+8){for(let x=100;x<1120;x+=150){let w=words[idx++%words.length];actx.fillText(w,x,y,145)}}
+ }else{
+  actx.strokeStyle='transparent';actx.lineWidth=1;
+  let total=0;for(let i=1;i<poly.length;i++)total+=Math.hypot(poly[i].x-poly[i-1].x,poly[i].y-poly[i-1].y);
+  let cursor=0,wi=0;actx.fillStyle=colour;actx.textBaseline='middle';actx.font=`${size}px "${font}"`;
+  for(let i=1;i<poly.length;i++){let a=poly[i-1],b=poly[i],len=Math.hypot(b.x-a.x,b.y-a.y);let angle=Math.atan2(b.y-a.y,b.x-a.x);let step=size*0.62+space;
+   for(let d=0;d<len;d+=step){let p=d/len;actx.save();actx.translate(a.x+(b.x-a.x)*p,a.y+(b.y-a.y)*p);let ang=angle;if(ang>Math.PI/2||ang< -Math.PI/2)ang+=Math.PI;actx.rotate(ang);let word=words[wi++%words.length];actx.font=`${size}px "${font}"`;actx.fillText(word,0,0);actx.restore()}
+  }
+ }
+ actx.restore();
+}
+$('update').onclick=renderArt;
+$('export').onclick=()=>{renderArt();const c=document.createElement('canvas');c.width=3000;c.height=3000;c.getContext('2d').drawImage(art,0,0,3000,3000);const a=document.createElement('a');a.download='my-typography-portrait.png';a.href=c.toDataURL('image/png');a.click()};
+renderArt();drawTrace();
+</script>
+</body></html>
